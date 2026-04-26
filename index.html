@@ -34,6 +34,8 @@
       <div id="mode-desc"></div>
       <div id="best-display"></div>
       <button class="btn-primary" onclick="startGame()">スタート</button>
+      <button class="btn-secondary" onclick="openBestList()">📊 ベスト一覧</button>
+      <button class="btn-back btn-sound" data-sound-type="full" onclick="toggleSound()">🔊 サウンドON</button>
     </div>
   </div>
 
@@ -48,8 +50,16 @@
         <div id="next-label">NEXT</div>
         <div id="next-display">1</div>
       </div>
+      <button class="btn-sound btn-sound-icon" data-sound-type="icon" onclick="toggleSound()">🔊</button>
     </div>
     <div id="math-note"></div>
+
+    <!-- 進捗バー -->
+    <div id="progress-wrap">
+      <div id="progress-bar-bg"><div id="progress-bar-fill"></div></div>
+      <div id="progress-text">0 / 25</div>
+    </div>
+
     <div id="penalty-info"></div>
     <div id="penalty-flash"></div>
     <div id="grid"></div>
@@ -77,7 +87,22 @@
     </div>
   </div>
 
+  <!-- ベスト一覧 -->
+  <div id="screen-bestlist" class="screen">
+    <div class="bestlist-inner">
+      <h2>📊 ベスト一覧</h2>
+      <div id="bestlist-content"></div>
+      <button class="btn-back" onclick="showTitle()">戻る</button>
+    </div>
+  </div>
+
 </div>
+
+<!-- カウントダウンオーバーレイ（画面全体に被さる） -->
+<div id="countdown-overlay">
+  <div id="countdown-number"></div>
+</div>
+
 <script src="modes.js"></script>
 <script src="game.js"></script>
 </body>

@@ -38,11 +38,13 @@ button {
 }
 button:active { transform: scale(0.95); opacity: 0.8; }
 
-.btn-primary { background: linear-gradient(135deg, #4a9eff, #0066cc); color: #fff; box-shadow: 0 4px 18px rgba(74,158,255,.35); margin-top: 14px; }
-.btn-share   { background: linear-gradient(135deg, #22c55e, #16a34a); color: #fff; }
-.btn-retry   { background: linear-gradient(135deg, #4a9eff, #0066cc); color: #fff; }
-.btn-back    { background: #1e1e35; color: #777; font-size: 0.95em; }
-.btn-quit    { background: #1a1a2a; color: #555; font-size: 0.9em; padding: 10px; margin-top: 10px; }
+.btn-primary    { background: linear-gradient(135deg, #4a9eff, #0066cc); color: #fff; box-shadow: 0 4px 18px rgba(74,158,255,.35); margin-top: 14px; }
+.btn-secondary  { background: #1c1c38; color: #999; border: 1px solid #2a2a50; }
+.btn-share      { background: linear-gradient(135deg, #22c55e, #16a34a); color: #fff; }
+.btn-retry      { background: linear-gradient(135deg, #4a9eff, #0066cc); color: #fff; }
+.btn-back       { background: #1e1e35; color: #777; font-size: 0.95em; }
+.btn-quit       { background: #1a1a2a; color: #555; font-size: 0.9em; padding: 10px; margin-top: 10px; }
+.btn-sound-icon { width: auto; padding: 7px 12px; font-size: 1.4em; margin: 0; background: #1c1c32; color: #ccc; border-radius: 10px; min-width: 2.8em; border: 1px solid #2a2a45; }
 
 /* ===== タイトル ===== */
 .title-inner { text-align: center; }
@@ -233,6 +235,7 @@ h1 {
   color: #ddd;
   cursor: pointer;
   user-select: none;
+  -webkit-touch-callout: none;
   border: 2px solid #252545;
   white-space: nowrap;
   overflow: hidden;
@@ -263,6 +266,10 @@ h1 {
 .cell.miss {
   background: #7f1d1d; border-color: #ef4444;
   animation: shake 0.22s ease;
+}
+.cell.hint-show {
+  background: #2a1060; border-color: #8b5cf6; color: #c4b5fd;
+  animation: none !important;
 }
 .cell.done {
   background: #0d1f0f; border-color: #0f2414; color: #1a5c28;
@@ -334,3 +341,95 @@ h2 { font-size: 2em; color: #ffd700; margin-bottom: 10px; animation: pop 0.35s e
   gap: 10px;
   margin-bottom: 0;
 }
+
+/* ===== 進捗バー ===== */
+#progress-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+  padding: 0 2px;
+}
+#progress-bar-bg {
+  flex: 1;
+  height: 8px;
+  background: #1c1c32;
+  border-radius: 4px;
+  overflow: hidden;
+}
+#progress-bar-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #22c55e, #4ade80);
+  border-radius: 4px;
+  transition: width 0.18s ease;
+}
+#progress-text {
+  font-size: 0.78em;
+  color: #555;
+  font-variant-numeric: tabular-nums;
+  min-width: 4.5em;
+  text-align: right;
+  font-weight: 600;
+}
+
+/* ===== カウントダウンオーバーレイ ===== */
+#countdown-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 10, 20, 0.88);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 300;
+  pointer-events: none;
+}
+#countdown-number {
+  font-size: min(30vw, 9rem);
+  font-weight: 900;
+  color: #ffd700;
+  line-height: 1;
+  text-shadow: 0 0 40px rgba(255, 215, 0, 0.5);
+}
+#countdown-number.pop {
+  animation: countPop 0.85s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+#countdown-number.go {
+  color: #22c55e;
+  text-shadow: 0 0 40px rgba(34, 197, 94, 0.5);
+  animation: countPop 0.75s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+@keyframes countPop {
+  0%   { transform: scale(0.4); opacity: 0; }
+  35%  { transform: scale(1.15); opacity: 1; }
+  65%  { transform: scale(1.0);  opacity: 1; }
+  100% { transform: scale(0.85); opacity: 0; }
+}
+
+/* ===== ベスト一覧 ===== */
+.bestlist-inner { text-align: center; }
+.bestlist-inner h2 { margin-bottom: 14px; }
+
+.best-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 16px;
+}
+.best-table th {
+  background: #14142a;
+  color: #666;
+  padding: 8px 3px;
+  font-weight: 600;
+  border: 1px solid #1e1e38;
+  font-size: 0.75em;
+}
+.best-table td {
+  padding: 8px 3px;
+  border: 1px solid #1a1a32;
+  background: #0f0f1a;
+  text-align: center;
+  vertical-align: middle;
+}
+.bl-rank  { font-size: 1.1em; display: block; line-height: 1.3; }
+.bl-time  { color: #4a9eff; font-weight: 700; font-size: 0.82em; display: block; font-variant-numeric: tabular-nums; }
+.bl-empty { color: #2a2a45; font-size: 1.2em; }
