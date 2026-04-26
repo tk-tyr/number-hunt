@@ -6,22 +6,22 @@
 // 伝説=達人×2/3  上級=達人×3/2  中級=達人×5/2  初級=達人×4
 const RANKS = {
   '3x3': {
-    simple: [[3,'👑','伝説'],[4,'🏆','達人'],[6,'🥇','上級'],[10,'🥈','中級'],[16,'🥉','初級']],
-    hard:   [[13,'👑','伝説'],[20,'🏆','達人'],[30,'🥇','上級'],[50,'🥈','中級'],[80,'🥉','初級']],
-    vhard:  [[22,'👑','伝説'],[33,'🏆','達人'],[50,'🥇','上級'],[83,'🥈','中級'],[132,'🥉','初級']],
-    hell:   [[34,'👑','伝説'],[51,'🏆','達人'],[77,'🥇','上級'],[128,'🥈','中級'],[204,'🥉','初級']],
+    simple: [[2,'👑','伝説'],[4,'🏆','達人'],[7,'🥇','上級'],[8,'🥈','中級'],[10,'🥉','初級']],
+    hard:   [[12,'👑','伝説'],[16,'🏆','達人'],[20,'🥇','上級'],[25,'🥈','中級'],[30,'🥉','初級']],
+    vhard:  [[12,'👑','伝説'],[16,'🏆','達人'],[20,'🥇','上級'],[25,'🥈','中級'],[30,'🥉','初級']],
+    hell:   [[25,'👑','伝説'],[30,'🏆','達人'],[35,'🥇','上級'],[40,'🥈','中級'],[45,'🥉','初級']],
   },
   '4x4': {
-    simple: [[6,'👑','伝説'],[9,'🏆','達人'],[14,'🥇','上級'],[23,'🥈','中級'],[36,'🥉','初級']],
-    hard:   [[24,'👑','伝説'],[36,'🏆','達人'],[54,'🥇','上級'],[90,'🥈','中級'],[144,'🥉','初級']],
-    vhard:  [[40,'👑','伝説'],[60,'🏆','達人'],[90,'🥇','上級'],[150,'🥈','中級'],[240,'🥉','初級']],
-    hell:   [[61,'👑','伝説'],[92,'🏆','達人'],[138,'🥇','上級'],[230,'🥈','中級'],[368,'🥉','初級']],
+    simple: [[5,'👑','伝説'],[7,'🏆','達人'],[10,'🥇','上級'],[14,'🥈','中級'],[20,'🥉','初級']],
+    hard:   [[40,'👑','伝説'],[45,'🏆','達人'],[50,'🥇','上級'],[60,'🥈','中級'],[70,'🥉','初級']],
+    vhard:  [[40,'👑','伝説'],[45,'🏆','達人'],[50,'🥇','上級'],[60,'🥈','中級'],[70,'🥉','初級']],
+    hell:   [[60,'👑','伝説'],[70,'🏆','達人'],[80,'🥇','上級'],[90,'🥈','中級'],[100,'🥉','初級']],
   },
   '5x5': {
-    simple: [[10,'👑','伝説'],[15,'🏆','達人'],[23,'🥇','上級'],[38,'🥈','中級'],[60,'🥉','初級']],
-    hard:   [[39,'👑','伝説'],[58,'🏆','達人'],[87,'🥇','上級'],[145,'🥈','中級'],[232,'🥉','初級']],
-    vhard:  [[63,'👑','伝説'],[95,'🏆','達人'],[143,'🥇','上級'],[238,'🥈','中級'],[380,'🥉','初級']],
-    hell:   [[97,'👑','伝説'],[145,'🏆','達人'],[218,'🥇','上級'],[363,'🥈','中級'],[580,'🥉','初級']],
+    simple: [[12,'👑','伝説'],[15,'🏆','達人'],[20,'🥇','上級'],[25,'🥈','中級'],[30,'🥉','初級']],
+    hard:   [[50,'👑','伝説'],[55,'🏆','達人'],[60,'🥇','上級'],[75,'🥈','中級'],[90,'🥉','初級']],
+    vhard:  [[50,'👑','伝説'],[55,'🏆','達人'],[60,'🥇','上級'],[75,'🥈','中級'],[90,'🥉','初級']],
+    hell:   [[75,'👑','伝説'],[85,'🏆','達人'],[95,'🥇','上級'],[110,'🥈','中級'],[120,'🥉','初級']],
   },
 };
 
@@ -111,21 +111,26 @@ function startGame() {
   updatePenaltyInfo();
   updateProgress();
 
-  // カウントダウン中はグリッドを無効化
-  document.getElementById('grid').style.pointerEvents = 'none';
+  // カウントダウン中はグリッドを無効化＆内容を非表示
+  const gridEl = document.getElementById('grid');
+  gridEl.style.pointerEvents = 'none';
+  gridEl.classList.add('cells-hidden');
 
-  showCountdown(() => {
-    document.getElementById('grid').style.pointerEvents = '';
-    startMs = Date.now();
-    timerInterval = setInterval(() => {
-      const el = document.getElementById('timer');
-      if (el) el.textContent = fmt((Date.now() - startMs) / 1000);
-    }, 50);
-  });
+  showCountdown(
+    () => {
+      gridEl.style.pointerEvents = '';
+      startMs = Date.now();
+      timerInterval = setInterval(() => {
+        const el = document.getElementById('timer');
+        if (el) el.textContent = fmt((Date.now() - startMs) / 1000);
+      }, 50);
+    },
+    () => gridEl.classList.remove('cells-hidden')  // GO!の瞬間に公開
+  );
 }
 
 // ===== カウントダウン =====
-function showCountdown(onDone) {
+function showCountdown(onDone, onGo) {
   const overlay = document.getElementById('countdown-overlay');
   const el      = document.getElementById('countdown-number');
   overlay.style.display = 'flex';
@@ -140,9 +145,10 @@ function showCountdown(onDone) {
       return;
     }
     el.textContent = count > 0 ? String(count) : 'GO!';
-    el.className   = '';       // クラスを外してアニメーションをリセット
-    void el.offsetWidth;       // reflow してから付け直す
+    el.className   = '';
+    void el.offsetWidth;
     el.className   = count === 0 ? 'go' : 'pop';
+    if (count === 0 && onGo) onGo();  // GO!の瞬間にセルを公開
     count--;
     countdownTimer = setTimeout(tick, count >= 0 ? 900 : 750);
   };
@@ -320,6 +326,17 @@ function openBestList() {
   showScreen('bestlist');
 }
 
+function resetBests() {
+  if (!confirm('全てのベストタイムをリセットしますか？')) return;
+  ['3','4','5'].forEach(g => {
+    ['simple','hard','vhard','hell'].forEach(m => {
+      localStorage.removeItem(`nh-best-${g}x${g}-${m}`);
+    });
+  });
+  renderBestList();
+  refreshTitle();
+}
+
 function renderBestList() {
   const sizes     = [3, 4, 5];
   const modes     = ['simple', 'hard', 'vhard', 'hell'];
@@ -349,13 +366,12 @@ function renderBestList() {
 
 // ランク基準の一覧テキストを生成
 function buildRankGuide(list, currentLabel) {
-  const emojis = ['👑','🏆','🥇','🥈','🥉','👶'];
-  const lines   = list.map(([t, e, lbl]) => {
-    const mark = lbl === currentLabel ? '◀' : '';
-    return `${e}${lbl}: ${t}秒未満 ${mark}`;
+  const lines = list.map(([t, e, lbl]) => {
+    const mark = lbl === currentLabel ? ' ◀' : '';
+    return `${e} ${lbl}: ${t}秒未満${mark}`;
   });
-  lines.push(`${emojis[5]}これから！`);
-  return lines.join('  ');
+  lines.push('👶 これから！');
+  return lines.join('\n');
 }
 
 // ===== ユーティリティ =====

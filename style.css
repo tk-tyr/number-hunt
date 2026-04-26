@@ -45,6 +45,7 @@ button:active { transform: scale(0.95); opacity: 0.8; }
 .btn-back       { background: #1e1e35; color: #777; font-size: 0.95em; }
 .btn-quit       { background: #1a1a2a; color: #555; font-size: 0.9em; padding: 10px; margin-top: 10px; }
 .btn-sound-icon { width: auto; padding: 7px 12px; font-size: 1.4em; margin: 0; background: #1c1c32; color: #ccc; border-radius: 10px; min-width: 2.8em; border: 1px solid #2a2a45; }
+.btn-danger     { background: #1e0a0a; color: #b45555; font-size: 0.85em; padding: 10px; margin-top: 6px; }
 
 /* ===== タイトル ===== */
 .title-inner { text-align: center; }
@@ -240,7 +241,7 @@ h1 {
   white-space: nowrap;
   overflow: hidden;
   padding: 2px;
-  transition: background 0.07s, border-color 0.07s;
+  transition: background 0.07s, border-color 0.07s, color 0.2s;
   will-change: transform;
 }
 
@@ -258,6 +259,8 @@ h1 {
 #grid.grid-4 .cell[data-len="xl"] { font-size: clamp(0.65rem, 3.2vw, 0.95rem); }
 
 .cell:active { transform: scale(0.88); }
+
+#grid.cells-hidden .cell { color: transparent !important; }
 
 .cell.hit {
   background: #15803d; border-color: #22c55e; color: #fff;
@@ -315,7 +318,10 @@ h2 { font-size: 2em; color: #ffd700; margin-bottom: 10px; animation: pop 0.35s e
   font-size: 0.78em;
   color: #555;
   margin-bottom: 6px;
-  line-height: 1.6;
+  line-height: 1.8;
+  white-space: pre-wrap;
+  text-align: left;
+  display: inline-block;
 }
 
 #result-penalty {
